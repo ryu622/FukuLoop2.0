@@ -1,15 +1,16 @@
 #タイトル
-FukuLoop
+FukuLoop2.0
 
 #概要・背景
 塾講師をしていて生徒のタスク管理（英単語小テストなど）やモチベ維持に課題を感じていたため製作しました。
 受験生など勉強をする人向けにタスク管理をするためのただのTo doリストではなく、完了ボタンを押したら７日後に再表示されるようにすることで復習できるようにし、
 モチベーションに働きかけるために過去７日間のタスク完了回数をグラフ化して可視化しました。SQLインジェクション対策としてバリデーション機能も実装しました。
-ゆくゆくは７日だけでなく３日後、１４日後などに再表示できるような機能やグラフの更新がまだ静的なので現在JavaScriptを学習し動的に更新する機能を追加したいと考えています。
+ゆくゆくは７日だけでなく３日後、１４日後などに再表示できるような機能を追加したいと考えています。
+以前作成した「FukuLoop」の改良版です。フロントエンドにJavaScriptを組み込み、グラフを動的に更新する機能を実装しました。（グラフ描画にはChart.jsを使用）具体的にはバックエンドのflaskでグラフに必要なデータを送るエンドポイントを作成し、フロントエンドのJavaScriptでAPIを叩き（fetchし）、Chart.jsで描画するという仕組みです。
 
 #インストール方法
-git clone https://github.com/ryu622/FukuLoop.git
-cd FukuLoop
+git clone https://github.com/ryu622/FukuLoop2.0.git
+cd FukuLoop2.0
 pip install -r requirements.txt
 
 #使用方法
@@ -24,12 +25,12 @@ pip install -r requirements.txt
 ・ログイン機能（Flask-Loginを使用）
 ・課題作成機能（Flask-WTFを使用）
 ・課題管理機能、再表示機能（DBはFlask-SQLAlchemyを使用)
-・グラフ表示機能（Pythonのmatplotlibを使用、seabornでデザインをしました）
+・グラフ表示機能（JavaScriptによる動的更新を実装。グラフ描画にはChart.jsを使用。）
 ・バリデーション機能（Flask-WTFを使用）
 ・マイグレーション機能(Flask-Migrateを使用）
 
 #開発環境・技術スタック
-Python,Flask,HTML,CSS
+Python,Flask,HTML,CSS,JavaScript
 
 #ライセンス
 MIT License
