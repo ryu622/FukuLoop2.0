@@ -1,5 +1,5 @@
 import os
-from flask import Flask,render_template,request,redirect,url_for,flash
+from flask import Flask,render_template,request,redirect,url_for,flash,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime,timedelta,date
@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
 import seaborn as sns
+import json
 
 # =====================
 # インスタンス生成
@@ -109,6 +110,39 @@ def index():
     uncompleted_tasks  = Task.query.filter((Task.is_completed==False)|((Task.completed_date <= seven_days_ago))).all()
     # 完了課題を取得
     completed_tasks  = Task.query.filter_by(is_completed=True).all()
+    return render_template('index.html',completed_tasks=completed_tasks,uncompleted_tasks=uncompleted_tasks)
+
+'''#api1
+@app.route('/api/uncompleted_tasks')
+def uncompleted_tasks():
+    #今日を定義しておく 
+    now=datetime.utcnow()
+    #７日前の日付けを取得
+    seven_days_ago = now - timedelta(days=7)
+    # 未完了課題を取得
+    uncompleted_tasks  = Task.query.filter((Task.is_completed==False)|((Task.completed_date <= seven_days_ago))).all()
+    return jsonify({'status': 'ok',
+    "message": "取得成功",
+    'uncompleted_tasks': uncompleted_tasks
+    })
+
+#api2
+@app.route('/api/completed_tasks')
+def completed_tasks():
+    #今日を定義しておく 
+    now=datetime.utcnow()
+    #７日前の日付けを取得
+    seven_days_ago = now - timedelta(days=7)
+    # 完了課題を取得
+    completed_tasks  = Task.query.filter_by(is_completed=True).all()
+    return jsonify({'status': 'ok',
+    "message": "取得成功",
+    'completed_tasks': completed_tasks
+    })
+'''
+#api3
+@app.route('/api/counts')
+def api():
     #グラフ表示機能追加
     today = date.today()#今日の日付
     dates = [today - timedelta(days=i) for i in range(6, -1, -1)]  # 過去7日
@@ -130,7 +164,7 @@ def index():
         counts[day] = count
     print(counts)
     #グラフ生成関数
-    def generate_graph():
+    '''def generate_graph():
         x = list(counts.keys())  # 日付のリスト
         y = list(counts.values())  # 完了タスク数のリスト
         sns.set()#seabornでグラフのデザインを整える
@@ -143,10 +177,21 @@ def index():
         static_path = os.path.join(base_path, 'static', 'graph.png')
         plt.savefig(static_path)#画像を保存
         plt.close()
-    generate_graph()
-    return render_template('index.html', uncompleted_tasks= uncompleted_tasks, 
-                           completed_tasks=completed_tasks)
+    generate_graph()'''
     
+    
+    # 新しい辞書を作成してキーを文字列に変換(countsのキーがdatetimeオブジェクトのため)
+    data = {}
+    for k, v in counts.items():
+        data[k.isoformat()] = v
+    
+    print(data)
+    return jsonify({
+    'status': 'ok',
+    "message": "取得成功",
+    'data': data
+})
+
 
 # 登録
 @app.route('/new', methods=['GET', 'POST'])

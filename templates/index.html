@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FukuLoop</title>
+    <title>FukuLoop2.0</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>FukuLoop</h1>
+    <h1>FukuLoop2.0</h1>
     <h2>完了ボタンを押すと復習として７日後に再表示されます。もう復習しないで良いと思ったら復習完了ボタンを押してください。</h2>
     <div class="container">
         <a href="{{ url_for('new_task') }}" class="button">新規作成</a>
@@ -39,11 +39,16 @@
             {% endfor %}
         </ul>
         <h2>過去７日間のタスクの完了状況</h2>
-        <img src="{{url_for('static',filename='graph.png')}}" alt="Task Completion" class="task-fig">
+        <canvas id="myChart"></canvas>
+        
 
         <div class="logout-container">
         <a href="{{ url_for('logout') }}" class="button">ログアウト</a>
         </div>
     </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
 </html>
